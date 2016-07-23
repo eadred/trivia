@@ -48,13 +48,13 @@ namespace UglyTrivia
         public bool add(String playerName)
         {
             players.Add(playerName);
-
             places[howManyPlayers()] = 0;
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
 
             Console.WriteLine(playerName + " was added");
             Console.WriteLine("They are player number " + howManyPlayers());
+
             return true;
         }
 
@@ -65,12 +65,11 @@ namespace UglyTrivia
 
         public void roll(int roll)
         {
-            Console.WriteLine(players[currentPlayer] + " is the current player");
-            Console.WriteLine("They have rolled a " + roll);
-            
+            ReportCurrentPlayersRoll(roll);
+
             if (IsCurrentPlayerInPenaltyBox())
             {
-                if (roll % 2 != 0)
+                if (RollIsOdd(roll))
                 {
                     CanLeavePenaltyBox();
                     MoveAndAskPlayer(roll);
@@ -84,6 +83,17 @@ namespace UglyTrivia
             {
                 MoveAndAskPlayer(roll);
             }
+        }
+
+        private void ReportCurrentPlayersRoll(int roll)
+        {
+            Console.WriteLine(players[currentPlayer] + " is the current player");
+            Console.WriteLine("They have rolled a " + roll);
+        }
+
+        private static bool RollIsOdd(int roll)
+        {
+            return roll % 2 != 0;
         }
 
         private void MoveAndAskPlayer(int roll)
@@ -106,12 +116,20 @@ namespace UglyTrivia
 
         private void MovePlayerBy(int moves)
         {
-            places[currentPlayer] = places[currentPlayer] + moves;
-            if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+            CurrentPlayerPlace += moves;
+            if (IsPlayerBeyondEndOfTheBoard) CurrentPlayerPlace -= 12;
 
             Console.WriteLine(players[currentPlayer]
                               + "'s new location is "
-                              + places[currentPlayer]);
+                              + CurrentPlayerPlace);
+        }
+
+        private bool IsPlayerBeyondEndOfTheBoard => CurrentPlayerPlace > 11;
+
+        private int CurrentPlayerPlace
+        {
+            get { return places[currentPlayer]; }
+            set { places[currentPlayer] = value; }
         }
 
         private void AskQuestion()
