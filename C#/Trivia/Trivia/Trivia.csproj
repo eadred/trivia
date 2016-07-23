@@ -74,6 +74,7 @@
     <Compile Include="GameResultsGenerator.cs" />
     <Compile Include="GameRunner.cs" />
     <Compile Include="GeneratorTests.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriviaTests.cs" />
   </ItemGroup>
