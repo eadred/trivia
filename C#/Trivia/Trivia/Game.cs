@@ -16,23 +16,31 @@ namespace UglyTrivia
 
         bool[] inPenaltyBox = new bool[6];
 
-        LinkedList<string> popQuestions = new LinkedList<string>();
-        LinkedList<string> scienceQuestions = new LinkedList<string>();
-        LinkedList<string> sportsQuestions = new LinkedList<string>();
-        LinkedList<string> rockQuestions = new LinkedList<string>();
+        Dictionary<string, LinkedList<string>> decks = new Dictionary<string, LinkedList<string>>();
 
         int currentPlayer = 0;
         bool isGettingOutOfPenaltyBox;
 
         public Game()
         {
+            LinkedList<string> popQuestions = new LinkedList<string>();
+            LinkedList<string> scienceQuestions = new LinkedList<string>();
+            LinkedList<string> sportsQuestions = new LinkedList<string>();
+            LinkedList<string> rockQuestions = new LinkedList<string>();
+
             for (int i = 0; i < 50; i++)
             {
+                
                 popQuestions.AddLast("Pop Question " + i);
                 scienceQuestions.AddLast(("Science Question " + i));
                 sportsQuestions.AddLast(("Sports Question " + i));
                 rockQuestions.AddLast(createRockQuestion(i));
             }
+
+            decks["Pop"] = popQuestions;
+            decks["Science"] = scienceQuestions;
+            decks["Sports"] = sportsQuestions;
+            decks["Rock"] = rockQuestions;
         }
 
         public String createRockQuestion(int index)
@@ -107,26 +115,9 @@ namespace UglyTrivia
 
         private void askQuestion()
         {
-            if (currentCategory() == "Pop")
-            {
-                Console.WriteLine(popQuestions.First());
-                popQuestions.RemoveFirst();
-            }
-            if (currentCategory() == "Science")
-            {
-                Console.WriteLine(scienceQuestions.First());
-                scienceQuestions.RemoveFirst();
-            }
-            if (currentCategory() == "Sports")
-            {
-                Console.WriteLine(sportsQuestions.First());
-                sportsQuestions.RemoveFirst();
-            }
-            if (currentCategory() == "Rock")
-            {
-                Console.WriteLine(rockQuestions.First());
-                rockQuestions.RemoveFirst();
-            }
+            var deck = decks[currentCategory()];
+            Console.WriteLine(deck.First());
+            deck.RemoveFirst();
         }
 
 
