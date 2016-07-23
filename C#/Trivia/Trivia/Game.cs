@@ -15,6 +15,7 @@ namespace UglyTrivia
         int[] purses = new int[6];
 
         bool[] inPenaltyBox = new bool[6];
+        private Action<int>[] rollAction = new Action<int>[6];
 
         Dictionary<string, LinkedList<string>> decks = new Dictionary<string, LinkedList<string>>();
 
@@ -23,6 +24,11 @@ namespace UglyTrivia
 
         public Game()
         {
+            for (int i = 0; i < rollAction.Length; i++)
+            {
+                rollAction[i] = rollWhenNotInPenaltyBox;
+            }
+
             LinkedList<string> popQuestions = new LinkedList<string>();
             LinkedList<string> scienceQuestions = new LinkedList<string>();
             LinkedList<string> sportsQuestions = new LinkedList<string>();
@@ -61,6 +67,7 @@ namespace UglyTrivia
             places[howManyPlayers()] = 0;
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
+            rollAction[howManyPlayers()] = rollWhenNotInPenaltyBox;
 
             Console.WriteLine(playerName + " was added");
             Console.WriteLine("They are player number " + players.Count);
@@ -72,45 +79,49 @@ namespace UglyTrivia
             return players.Count;
         }
 
+        
+
         public void roll(int roll)
         {
             Console.WriteLine(players[currentPlayer] + " is the current player");
             Console.WriteLine("They have rolled a " + roll);
 
-            if (inPenaltyBox[currentPlayer])
+            rollAction[currentPlayer](roll);
+
+        }
+
+        private void rollWhenNotInPenaltyBox(int roll)
+        {
+            places[currentPlayer] = (places[currentPlayer] + roll)%12;
+
+            Console.WriteLine(players[currentPlayer]
+                              + "'s new location is "
+                              + places[currentPlayer]);
+            Console.WriteLine("The category is " + currentCategory());
+            askQuestion();
+        }
+
+        private void rollWhenInPenaltyBox(int roll)
+        {
+            if (roll%2 != 0)
             {
-                if (roll % 2 != 0)
-                {
-                    isGettingOutOfPenaltyBox = true;
+                isGettingOutOfPenaltyBox = true;
 
-                    Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
+                Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
 
-                    places[currentPlayer] = (places[currentPlayer] + roll) % 12;
-
-                    Console.WriteLine(players[currentPlayer]
-                            + "'s new location is "
-                            + places[currentPlayer]);
-                    Console.WriteLine("The category is " + currentCategory());
-                    askQuestion();
-                }
-                else
-                {
-                    Console.WriteLine(players[currentPlayer] + " is not getting out of the penalty box");
-                    isGettingOutOfPenaltyBox = false;
-                }
-
-            }
-            else
-            {
-                places[currentPlayer] = (places[currentPlayer] + roll) % 12;
+                places[currentPlayer] = (places[currentPlayer] + roll)%12;
 
                 Console.WriteLine(players[currentPlayer]
-                        + "'s new location is "
-                        + places[currentPlayer]);
+                                  + "'s new location is "
+                                  + places[currentPlayer]);
                 Console.WriteLine("The category is " + currentCategory());
                 askQuestion();
             }
-
+            else
+            {
+                Console.WriteLine(players[currentPlayer] + " is not getting out of the penalty box");
+                isGettingOutOfPenaltyBox = false;
+            }
         }
 
         private void askQuestion()
@@ -184,6 +195,7 @@ namespace UglyTrivia
             Console.WriteLine("Question was incorrectly answered");
             Console.WriteLine(players[currentPlayer] + " was sent to the penalty box");
             inPenaltyBox[currentPlayer] = true;
+            rollAction[currentPlayer] = rollWhenInPenaltyBox;
 
             currentPlayer = (currentPlayer + 1) % players.Count;
             return true;
