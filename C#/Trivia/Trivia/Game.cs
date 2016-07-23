@@ -123,16 +123,15 @@ namespace UglyTrivia
 
         private String currentCategory()
         {
-            if (places[currentPlayer] == 0) return "Pop";
-            if (places[currentPlayer] == 4) return "Pop";
-            if (places[currentPlayer] == 8) return "Pop";
-            if (places[currentPlayer] == 1) return "Science";
-            if (places[currentPlayer] == 5) return "Science";
-            if (places[currentPlayer] == 9) return "Science";
-            if (places[currentPlayer] == 2) return "Sports";
-            if (places[currentPlayer] == 6) return "Sports";
-            if (places[currentPlayer] == 10) return "Sports";
-            return "Rock";
+            var cats = new Dictionary<int, string>
+            {
+                {0, "Pop"},
+                {1, "Science"},
+                {2, "Sports"},
+                {3, "Rock"}
+            };
+
+            return cats[places[currentPlayer]%4];
         }
 
         public bool wasCorrectlyAnswered()
