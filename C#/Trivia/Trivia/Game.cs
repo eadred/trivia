@@ -47,15 +47,25 @@ namespace UglyTrivia
 
         public bool add(String playerName)
         {
+            InitialiseNewPlayerDetails(playerName);
+
+            ReportNewPlayerAdded(playerName);
+
+            return true;
+        }
+
+        private void ReportNewPlayerAdded(string playerName)
+        {
+            Console.WriteLine(playerName + " was added");
+            Console.WriteLine("They are player number " + howManyPlayers());
+        }
+
+        private void InitialiseNewPlayerDetails(string playerName)
+        {
             players.Add(playerName);
             places[howManyPlayers()] = 0;
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
-
-            Console.WriteLine(playerName + " was added");
-            Console.WriteLine("They are player number " + howManyPlayers());
-
-            return true;
         }
 
         public int howManyPlayers()
@@ -99,7 +109,23 @@ namespace UglyTrivia
         private void MoveAndAskPlayer(int roll)
         {
             MovePlayerBy(roll);
+
+            ReportNewPlayerPosition();
+
             AskQuestion();
+        }
+
+        private void ReportNewPlayerPosition()
+        {
+            Console.WriteLine(players[currentPlayer]
+                              + "'s new location is "
+                              + CurrentPlayerPlace);
+        }
+
+        private void MovePlayerBy(int roll)
+        {
+            CurrentPlayerPlace += roll;
+            if (IsPlayerBeyondEndOfTheBoard) CurrentPlayerPlace -= 12;
         }
 
         private void CantLeavePenaltyBox()
@@ -112,16 +138,6 @@ namespace UglyTrivia
         {
             isGettingOutOfPenaltyBox = true;
             Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
-        }
-
-        private void MovePlayerBy(int moves)
-        {
-            CurrentPlayerPlace += moves;
-            if (IsPlayerBeyondEndOfTheBoard) CurrentPlayerPlace -= 12;
-
-            Console.WriteLine(players[currentPlayer]
-                              + "'s new location is "
-                              + CurrentPlayerPlace);
         }
 
         private bool IsPlayerBeyondEndOfTheBoard => CurrentPlayerPlace > 11;
