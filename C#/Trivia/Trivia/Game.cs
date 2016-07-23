@@ -47,15 +47,14 @@ namespace UglyTrivia
 
         public bool add(String playerName)
         {
-
-
             players.Add(playerName);
+
             places[howManyPlayers()] = 0;
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
 
             Console.WriteLine(playerName + " was added");
-            Console.WriteLine("They are player number " + players.Count);
+            Console.WriteLine("They are player number " + howManyPlayers());
             return true;
         }
 
@@ -68,8 +67,8 @@ namespace UglyTrivia
         {
             Console.WriteLine(players[currentPlayer] + " is the current player");
             Console.WriteLine("They have rolled a " + roll);
-
-            if (inPenaltyBox[currentPlayer])
+            
+            if (IsCurrentPlayerInPenaltyBox())
             {
                 if (roll % 2 != 0)
                 {
@@ -82,8 +81,7 @@ namespace UglyTrivia
                     Console.WriteLine(players[currentPlayer]
                             + "'s new location is "
                             + places[currentPlayer]);
-                    Console.WriteLine("The category is " + currentCategory());
-                    askQuestion();
+                    AskQuestion();
                 }
                 else
                 {
@@ -101,14 +99,13 @@ namespace UglyTrivia
                 Console.WriteLine(players[currentPlayer]
                         + "'s new location is "
                         + places[currentPlayer]);
-                Console.WriteLine("The category is " + currentCategory());
-                askQuestion();
+                AskQuestion();
             }
-
         }
 
-        private void askQuestion()
+        private void AskQuestion()
         {
+            Console.WriteLine("The category is " + currentCategory());
             if (currentCategory() == "Pop")
             {
                 Console.WriteLine(popQuestions.First());
@@ -129,6 +126,11 @@ namespace UglyTrivia
                 Console.WriteLine(rockQuestions.First());
                 rockQuestions.RemoveFirst();
             }
+        }
+
+        private bool IsCurrentPlayerInPenaltyBox()
+        {
+            return inPenaltyBox[currentPlayer];
         }
 
 
