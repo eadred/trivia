@@ -8,11 +8,7 @@ namespace UglyTrivia
 {
     public class Game
     {
-
-
         List<Player> _players = new List<Player>();
-        
-        int[] purses = new int[6];
 
         bool[] inPenaltyBox = new bool[6];
 
@@ -50,7 +46,7 @@ namespace UglyTrivia
 
             _players.Add(new Player() {Name = playerName});
             _players[howManyPlayers() - 1].Place = 0;
-            purses[howManyPlayers()] = 0;
+            _players[howManyPlayers() - 1].Purse = 0;
             inPenaltyBox[howManyPlayers()] = false;
 
             Console.WriteLine(playerName + " was added");
@@ -154,10 +150,10 @@ namespace UglyTrivia
                 if (isGettingOutOfPenaltyBox)
                 {
                     Console.WriteLine("Answer was correct!!!!");
-                    purses[currentPlayer]++;
+                    _players[currentPlayer].Purse++;
                     Console.WriteLine(_players[currentPlayer].Name
                             + " now has "
-                            + purses[currentPlayer]
+                            + _players[currentPlayer].Purse
                             + " Gold Coins.");
 
                     bool winner = didPlayerWin();
@@ -180,10 +176,10 @@ namespace UglyTrivia
             {
 
                 Console.WriteLine("Answer was corrent!!!!");
-                purses[currentPlayer]++;
+                _players[currentPlayer].Purse++;
                 Console.WriteLine(_players[currentPlayer].Name
                         + " now has "
-                        + purses[currentPlayer]
+                        + _players[currentPlayer].Purse
                         + " Gold Coins.");
 
                 bool winner = didPlayerWin();
@@ -208,7 +204,7 @@ namespace UglyTrivia
 
         private bool didPlayerWin()
         {
-            return !(purses[currentPlayer] == 6);
+            return !(_players[currentPlayer].Purse == 6);
         }
     }
 }
