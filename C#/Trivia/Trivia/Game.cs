@@ -148,15 +148,14 @@ namespace UglyTrivia
                             + " Gold Coins.");
 
                     bool winner = didPlayerWin();
-                    currentPlayer++;
-                    if (currentPlayer == players.Count) currentPlayer = 0;
+
+                    currentPlayer = (currentPlayer + 1) % players.Count;
 
                     return winner;
                 }
                 else
                 {
-                    currentPlayer++;
-                    if (currentPlayer == players.Count) currentPlayer = 0;
+                    currentPlayer = (currentPlayer + 1) % players.Count;
                     return true;
                 }
 
