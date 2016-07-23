@@ -173,8 +173,7 @@ namespace UglyTrivia
                         + " Gold Coins.");
 
                 bool winner = didPlayerWin();
-                currentPlayer++;
-                if (currentPlayer == players.Count) currentPlayer = 0;
+                currentPlayer = (currentPlayer + 1) % players.Count;
 
                 return winner;
             }
@@ -186,8 +185,7 @@ namespace UglyTrivia
             Console.WriteLine(players[currentPlayer] + " was sent to the penalty box");
             inPenaltyBox[currentPlayer] = true;
 
-            currentPlayer++;
-            if (currentPlayer == players.Count) currentPlayer = 0;
+            currentPlayer = (currentPlayer + 1) % players.Count;
             return true;
         }
 
