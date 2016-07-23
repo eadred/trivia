@@ -34,29 +34,29 @@ namespace Trivia
 
         private static void RunGame(int seed)
         {
-            bool notAWinner = false;
+            bool shouldContinue = false;
             Game aGame = new Game();
 
-            aGame.add("Chet");
-            aGame.add("Pat");
-            aGame.add("Sue");
+            aGame.addPlayer("Chet");
+            aGame.addPlayer("Pat");
+            aGame.addPlayer("Sue");
 
 
             Random rand = new Random(seed);
 
             do
             {
-                aGame.roll(rand.Next(5) + 1);
+                aGame.playTurn(rand.Next(5) + 1);
 
                 if (rand.Next(9) == 7)
                 {
-                    notAWinner = aGame.wrongAnswer();
+                    shouldContinue = aGame.shouldContinueOnIncorrectAnswer();
                 }
                 else
                 {
-                    notAWinner = aGame.wasCorrectlyAnswered();
+                    shouldContinue = aGame.shouldContinueOnCorrectAnswer();
                 }
-            } while (notAWinner);
+            } while (shouldContinue);
         }
     }
 }

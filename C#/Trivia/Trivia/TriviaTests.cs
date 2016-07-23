@@ -16,7 +16,7 @@ namespace Tests
         {
             Game sut = new Game();
             
-            Assert.IsFalse(sut.isPlayable());
+            Assert.IsFalse(sut.hasEnoughPlayers());
         }
 
         [Test]
@@ -24,9 +24,9 @@ namespace Tests
         {
             Game sut = new Game();
 
-            sut.add("Bob");
+            sut.addPlayer("Bob");
 
-            Assert.IsFalse(sut.isPlayable());
+            Assert.IsFalse(sut.hasEnoughPlayers());
         }
 
         [Test]
@@ -34,10 +34,10 @@ namespace Tests
         {
             Game sut = new Game();
 
-            sut.add("Bob");
-            sut.add("Jack");
+            sut.addPlayer("Bob");
+            sut.addPlayer("Jack");
 
-            Assert.IsTrue(sut.isPlayable());
+            Assert.IsTrue(sut.hasEnoughPlayers());
         }
 
         [Test]
@@ -46,8 +46,8 @@ namespace Tests
 
             Game sut = new Game();
 
-            sut.add("Bob");
-            sut.add("Jack");
+            sut.addPlayer("Bob");
+            sut.addPlayer("Jack");
 
             Assert.AreEqual(2, sut.howManyPlayers());
         }
@@ -70,19 +70,19 @@ namespace Tests
         public void CorrectAnswersRequiredToWinAGame(int turnCount, bool expected)
         {
             var sut = new Game();
-            sut.add("Bob");
-            sut.add("Alice");
+            sut.addPlayer("Bob");
+            sut.addPlayer("Alice");
 
             bool didPlayerWin = false;
             for (int turn = 1; turn <= turnCount; turn++)
             {
                 //Bob
-                sut.roll(1);
-                didPlayerWin = sut.wasCorrectlyAnswered();
+                sut.advancePlayerAndAskQuestion(1);
+                didPlayerWin = sut.shouldContinueOnCorrectAnswer();
 
                 //Alice
-                sut.roll(1);
-                sut.wasCorrectlyAnswered();
+                sut.advancePlayerAndAskQuestion(1);
+                sut.shouldContinueOnCorrectAnswer();
             }
 
             Assert.AreEqual(expected, didPlayerWin);
