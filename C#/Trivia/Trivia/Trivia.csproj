@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="FileCompare.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameResultsGenerator.cs" />
     <Compile Include="GameRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriviaTests.cs" />
