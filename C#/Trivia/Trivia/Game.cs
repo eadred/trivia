@@ -72,35 +72,46 @@ namespace UglyTrivia
             {
                 if (roll % 2 != 0)
                 {
-                    isGettingOutOfPenaltyBox = true;
-
-                    Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
-                    places[currentPlayer] = places[currentPlayer] + roll;
-                    if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-                    Console.WriteLine(players[currentPlayer]
-                            + "'s new location is "
-                            + places[currentPlayer]);
-                    AskQuestion();
+                    CanLeavePenaltyBox();
+                    MoveAndAskPlayer(roll);
                 }
                 else
                 {
-                    Console.WriteLine(players[currentPlayer] + " is not getting out of the penalty box");
-                    isGettingOutOfPenaltyBox = false;
+                    CantLeavePenaltyBox();
                 }
-
             }
             else
             {
-
-                places[currentPlayer] = places[currentPlayer] + roll;
-                if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-                Console.WriteLine(players[currentPlayer]
-                        + "'s new location is "
-                        + places[currentPlayer]);
-                AskQuestion();
+                MoveAndAskPlayer(roll);
             }
+        }
+
+        private void MoveAndAskPlayer(int roll)
+        {
+            MovePlayerBy(roll);
+            AskQuestion();
+        }
+
+        private void CantLeavePenaltyBox()
+        {
+            Console.WriteLine(players[currentPlayer] + " is not getting out of the penalty box");
+            isGettingOutOfPenaltyBox = false;
+        }
+
+        private void CanLeavePenaltyBox()
+        {
+            isGettingOutOfPenaltyBox = true;
+            Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
+        }
+
+        private void MovePlayerBy(int moves)
+        {
+            places[currentPlayer] = places[currentPlayer] + moves;
+            if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+
+            Console.WriteLine(players[currentPlayer]
+                              + "'s new location is "
+                              + places[currentPlayer]);
         }
 
         private void AskQuestion()
