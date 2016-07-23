@@ -28,16 +28,16 @@ namespace UglyTrivia
         {
             for (int i = 0; i < 50; i++)
             {
-                popQuestions.AddLast("Pop Question " + i);
-                scienceQuestions.AddLast(("Science Question " + i));
-                sportsQuestions.AddLast(("Sports Question " + i));
-                rockQuestions.AddLast(createRockQuestion(i));
+                AddNewQuestion(popQuestions, "Pop", i);
+                AddNewQuestion(scienceQuestions, "Science", i);
+                AddNewQuestion(sportsQuestions, "Sports", i);
+                AddNewQuestion(rockQuestions, "Rock", i);
             }
         }
 
-        public String createRockQuestion(int index)
+        private void AddNewQuestion(LinkedList<string> deck, string category, int i)
         {
-            return "Rock Question " + index;
+            deck.AddLast($"{category} Question {i}");
         }
 
         public bool isPlayable()
