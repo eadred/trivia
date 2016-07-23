@@ -16,6 +16,7 @@ namespace UglyTrivia
 
         bool[] inPenaltyBox = new bool[6];
         private Action<int>[] rollAction = new Action<int>[6];
+        private Func<bool>[] answerCorrectlyAction = new Func<bool>[6];
 
         Dictionary<string, LinkedList<string>> decks = new Dictionary<string, LinkedList<string>>();
 
@@ -27,6 +28,7 @@ namespace UglyTrivia
             for (int i = 0; i < rollAction.Length; i++)
             {
                 rollAction[i] = rollWhenNotInPenaltyBox;
+                answerCorrectlyAction[i] = wasCorrectlyAnsweredWhenNotInPenaltyBox;
             }
 
             LinkedList<string> popQuestions = new LinkedList<string>();
@@ -68,6 +70,7 @@ namespace UglyTrivia
             purses[howManyPlayers()] = 0;
             inPenaltyBox[howManyPlayers()] = false;
             rollAction[howManyPlayers()] = rollWhenNotInPenaltyBox;
+            answerCorrectlyAction[howManyPlayers()] = wasCorrectlyAnsweredWhenNotInPenaltyBox;
 
             Console.WriteLine(playerName + " was added");
             Console.WriteLine("They are player number " + players.Count);
@@ -147,46 +150,54 @@ namespace UglyTrivia
 
         public bool wasCorrectlyAnswered()
         {
+            //return answerCorrectlyAction[currentPlayer]();
             if (inPenaltyBox[currentPlayer])
             {
-                if (isGettingOutOfPenaltyBox)
-                {
-                    Console.WriteLine("Answer was correct!!!!");
-                    purses[currentPlayer]++;
-                    Console.WriteLine(players[currentPlayer]
-                            + " now has "
-                            + purses[currentPlayer]
-                            + " Gold Coins.");
-
-                    bool winner = didPlayerWin();
-
-                    currentPlayer = (currentPlayer + 1) % players.Count;
-
-                    return winner;
-                }
-                else
-                {
-                    currentPlayer = (currentPlayer + 1) % players.Count;
-                    return true;
-                }
-
-
-
+                return wasCorrectlyAnsweredWhenInPenaltyBox();
             }
             else
             {
 
-                Console.WriteLine("Answer was corrent!!!!");
+                return wasCorrectlyAnsweredWhenNotInPenaltyBox();
+            }
+        }
+
+        private bool wasCorrectlyAnsweredWhenNotInPenaltyBox()
+        {
+            Console.WriteLine("Answer was corrent!!!!");
+            purses[currentPlayer]++;
+            Console.WriteLine(players[currentPlayer]
+                              + " now has "
+                              + purses[currentPlayer]
+                              + " Gold Coins.");
+
+            bool winner = didPlayerWin();
+            currentPlayer = (currentPlayer + 1)%players.Count;
+
+            return winner;
+        }
+
+        private bool wasCorrectlyAnsweredWhenInPenaltyBox()
+        {
+            if (isGettingOutOfPenaltyBox)
+            {
+                Console.WriteLine("Answer was correct!!!!");
                 purses[currentPlayer]++;
                 Console.WriteLine(players[currentPlayer]
-                        + " now has "
-                        + purses[currentPlayer]
-                        + " Gold Coins.");
+                                  + " now has "
+                                  + purses[currentPlayer]
+                                  + " Gold Coins.");
 
                 bool winner = didPlayerWin();
-                currentPlayer = (currentPlayer + 1) % players.Count;
+
+                currentPlayer = (currentPlayer + 1)%players.Count;
 
                 return winner;
+            }
+            else
+            {
+                currentPlayer = (currentPlayer + 1)%players.Count;
+                return true;
             }
         }
 
@@ -196,6 +207,7 @@ namespace UglyTrivia
             Console.WriteLine(players[currentPlayer] + " was sent to the penalty box");
             inPenaltyBox[currentPlayer] = true;
             rollAction[currentPlayer] = rollWhenInPenaltyBox;
+            answerCorrectlyAction[howManyPlayers()] = wasCorrectlyAnsweredWhenInPenaltyBox;
 
             currentPlayer = (currentPlayer + 1) % players.Count;
             return true;
